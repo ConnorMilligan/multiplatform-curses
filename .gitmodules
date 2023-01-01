@@ -1,0 +1,6 @@
+[submodule "lib/PDCurses"]
+	path = lib/PDCurses
+	url = https://github.com/wmcbrine/PDCurses
+[submodule "lib/SDL"]
+	path = lib/SDL
+	url = https://github.com/libsdl-org/SDL
