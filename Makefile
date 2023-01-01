@@ -5,10 +5,12 @@ CFLAGS = -Wall
 LDFLAGS = -lncurses
 SDL = N
 TARGET = console
+MAKE = make
 
 ifeq ($(UNAME_S), windows32)
 	LDFLAGS = lib/PDCurses/wincon/pdcurses.a
 	TARGET = wincon
+	MAKE = mingw32-make
 endif
 
 ifeq ($(SDL), Y)
@@ -34,14 +36,14 @@ console: $(OBJ)
 
 wincon: $(OBJ)
 	git submodule update
-	cd lib/PDCurses/wincon && make
+	cd lib/PDCurses/wincon && $(MAKE)
 	$(CC) -o main $^ $(CFLAGS) $(LDFLAGS)
 
 sdl: $(OBJ)
 	git submodule update
 	cd lib && mkdir $(subst /,\,SDLlib)
-	cd lib/SDLlib && cmake ../SDL -G "MinGW Makefiles" -B . && make
-	cd lib/PDCurses/sdl2 && make
+	cd lib/SDLlib && cmake ../SDL -G "MinGW Makefiles" -B . && $(MAKE)
+	cd lib/PDCurses/sdl2 && $(MAKE)
 	$(CC) -o main $^ $(CFLAGS) $(LDFLAGS)
 
 clean:
