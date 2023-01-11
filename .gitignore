@@ -1,4 +1,3 @@
 main
 main.exe
 src/*.o
-lib/SDLlib

@@ -1,4 +1,4 @@
-#include "../lib/PDCurses/curses.h"
+#include <curses.h>
 
 int main(void) {
     
