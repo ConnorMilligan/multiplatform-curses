@@ -1,0 +1,11 @@
+/mnt/c/Users/Connor/Documents/multiplatform-curses/build/CMakeFiles/curses.dir
+/mnt/c/Users/Connor/Documents/multiplatform-curses/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Connor/Documents/multiplatform-curses/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/Connor/Documents/multiplatform-curses/build/lib/SDL/CMakeFiles/sdl_headers_copy.dir
+/mnt/c/Users/Connor/Documents/multiplatform-curses/build/lib/SDL/CMakeFiles/SDL2main.dir
+/mnt/c/Users/Connor/Documents/multiplatform-curses/build/lib/SDL/CMakeFiles/SDL2.dir
+/mnt/c/Users/Connor/Documents/multiplatform-curses/build/lib/SDL/CMakeFiles/SDL2-static.dir
+/mnt/c/Users/Connor/Documents/multiplatform-curses/build/lib/SDL/CMakeFiles/SDL2_test.dir
+/mnt/c/Users/Connor/Documents/multiplatform-curses/build/lib/SDL/CMakeFiles/uninstall.dir
+/mnt/c/Users/Connor/Documents/multiplatform-curses/build/lib/SDL/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Connor/Documents/multiplatform-curses/build/lib/SDL/CMakeFiles/rebuild_cache.dir

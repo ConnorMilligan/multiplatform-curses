@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/curses.dir/src/main.c.o -o curses  ../lib/PDCurses/sdl2/pdcurses.a -lSDL2 
