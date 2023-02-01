@@ -1,11 +1,9 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 project(curses)
 
 option(SDL "Build the program for SDL" OFF)
 include_directories("${PROJECT_SOURCE_DIR}/lib/PDCurses")
 message("Build with SDL=ON for SDL support")
-
-
 
 if(SDL)
     # Checks to see if git is present
@@ -18,18 +16,24 @@ if(SDL)
                 COMMAND_ERROR_IS_FATAL ANY)
     endif()
 
-    #set(SDL_LIBRARY "2.27.0")
-    set(SDL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib/SDL/include")
+    # Import SDL2 library
+    set(SDL2_DIR "${PROJECT_SOURCE_DIR}/lib/SDL")
     find_package(SDL2 REQUIRED)
-    include_directories("SDL_INCLUDE_DIR")
-    add_subdirectory("lib/SDL")
+    include_directories(${SDL2_INCLUDE_DIRS})
 
-    file(COPY "${PROJECT_SOURCE_DIR}/lib/Makefile" DESTINATION "${PROJECT_SOURCE_DIR}/lib/PDCurses/sdl2")
-    execute_process(COMMAND "${CMAKE_MAKE_PROGRAM}"
-                WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/lib/PDCurses/sdl2"
-                COMMAND_ERROR_IS_FATAL ANY)
+    # Import PDCurses library
+    include(ExternalProject)
+    ExternalProject_Add(PDCurses
+        SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/PDCurses/sdl2
+        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/PDCurses
+        BUILD_IN_SOURCE 1
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND make SFLAGS=-I../../SDL/include SLIBS=-L../../SDL/lib -lSDL2main -lSDL2
+        INSTALL_COMMAND ""
+        DEPENDS SDL2::SDL2
+    )
 
-    set(LIBRARIES "${PROJECT_SOURCE_DIR}/lib/PDCurses/sdl2/pdcurses.a" ${SDL2_LIBRARIES})
+    set(LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/lib/PDCurses/sdl2/pdcurses.a" SDL2::SDL2)
 else()
     if(WIN32)
         # Checks to see if git is present
@@ -42,9 +46,16 @@ else()
                     COMMAND_ERROR_IS_FATAL ANY)
         endif()
 
-        execute_process(COMMAND "${CMAKE_MAKE_PROGRAM}"
-                WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/lib/PDCurses/wincon"
-                COMMAND_ERROR_IS_FATAL ANY)
+        # Import PDCurses library
+        include(ExternalProject)
+        ExternalProject_Add(PDCurses
+            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/PDCurses/wincon
+            PREFIX ${CMAKE_CURRENT_BINARY_DIR}/PDCurses
+            BUILD_IN_SOURCE 1
+            CONFIGURE_COMMAND ""
+            BUILD_COMMAND make
+            INSTALL_COMMAND ""
+        )
         
         set(LIBRARIES "${PROJECT_SOURCE_DIR}/lib/PDCurses/wincon/pdcurses.a")
     else()
@@ -54,12 +65,8 @@ endif(SDL)
 
 file(GLOB PROJECT_HEADERS src/*.h)
 file(GLOB PROJECT_SOURCES src/*.c)
-file(GLOB PROJECT_CONFIGS CMakeLists.txt
-                          Readme.md
-                         .gitattributes
-                         .gitignore
-                         .gitmodules)
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PROJECT_CONFIGS})
+
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS})
 
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
