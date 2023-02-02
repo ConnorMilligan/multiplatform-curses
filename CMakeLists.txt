@@ -39,11 +39,11 @@ if(SDL)
     endif()
 
     # Import PDCurses library
-    execute_process(COMMAND "${CMAKE_MAKE_PROGRAM}" WIDE=N "SFLAGS=-I${PROJECT_SOURCE_DIR}/lib/SDL/include -I${PROJECT_SOURCE_DIR}/lib/SDL_ttf" SLIBS=-L${PROJECT_SOURCE_DIR}/lib/SDL -lSDL2main -lSDL2 -lSDL2_ttf
+    execute_process(COMMAND "${CMAKE_MAKE_PROGRAM}" WIDE=Y "SFLAGS=-I${PROJECT_SOURCE_DIR}/lib/SDL/include -I${PROJECT_SOURCE_DIR}/lib/SDL_ttf" SLIBS=-L${PROJECT_SOURCE_DIR}/lib/SDL -lSDL2main -lSDL2 -lSDL2_ttf
                 WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/lib/PDCurses/sdl2"
                 COMMAND_ERROR_IS_FATAL ANY)
 
-    set(LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/lib/PDCurses/sdl2/pdcurses.a")
+    set(LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/lib/PDCurses/sdl2/pdcurses.a" SDL2_ttf)    
 
     # Be sure to link with the correct SDL2 lib
     if(NOT SDL2_FOUND)
@@ -51,13 +51,13 @@ if(SDL)
     else()
         list(APPEND LIBRARIES -lSDL2 -lSDL2main)
     endif()
-
     # Be sure to link with the correct SDL2_ttf lib
     if(NOT SDL2_TTF_FOUND)
         list(APPEND LIBRARIES "${PROJECT_BINARY_DIR}/lib/SDL_ttf/libSDL2_ttfd.a")
     else()
         list(APPEND LIBRARIES -lSDL2_ttf)
     endif()
+    message("${LIBRARIES}")
 else()
     if(WIN32)
         # Checks to see if git is present
@@ -71,15 +71,10 @@ else()
         endif()
 
         # Import PDCurses library
-        include(ExternalProject)
-        ExternalProject_Add(PDCurses
-            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/PDCurses/wincon
-            PREFIX ${CMAKE_CURRENT_BINARY_DIR}/PDCurses
-            BUILD_IN_SOURCE 1
-            CONFIGURE_COMMAND ""
-            BUILD_COMMAND make
-            INSTALL_COMMAND ""
-        )
+        execute_process(COMMAND "${CMAKE_MAKE_PROGRAM}"
+                WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/lib/PDCurses/wincon"
+                COMMAND_ERROR_IS_FATAL ANY)
+
         
         set(LIBRARIES "${PROJECT_SOURCE_DIR}/lib/PDCurses/wincon/pdcurses.a")
     else()
